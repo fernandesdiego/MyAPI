@@ -12,7 +12,7 @@ namespace MyAPI.Business.Interfaces
         Task Add(TEntity entity);
         Task<TEntity> GetById(Guid id);
         Task<List<TEntity>> GetAll();
-        Task Update(TEntity id);
+        Task Update(TEntity entity);
         Task Remove(Guid id);
         Task<IEnumerable<TEntity>> Search(Expression<Func<TEntity, bool>> predicate);
         Task<int> SaveChanges();
