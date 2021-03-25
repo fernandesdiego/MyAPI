@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MyAPI.Business.Interfaces;
 using MyAPI.Business.Models;
 
-namespace MyAPI.Business.Intefaces
+namespace MyAPI.Business.Interfaces
 {
     public interface IAddressRepository : IRepository<Address>
     {

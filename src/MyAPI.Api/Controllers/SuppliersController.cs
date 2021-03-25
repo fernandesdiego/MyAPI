@@ -13,11 +13,18 @@ namespace MyAPI.Api.Controllers
     public class SuppliersController : MainController
     {
         private readonly ISupplierRepository _supplierRepository;
+        private readonly IAddressRepository _addressRepository;
+        private readonly ISupplierService _supplierService;
         private readonly IMapper _mapper;
 
-        public SuppliersController(ISupplierRepository supplierRepository, IMapper mapper)
+        public SuppliersController(ISupplierRepository  supplierRepository, 
+                                   IAddressRepository   addressRepository,
+                                   ISupplierService     supplierService,
+                                   IMapper              mapper)
         {
             _supplierRepository = supplierRepository;
+            _addressRepository = addressRepository;
+            _supplierService = supplierService;
             _mapper = mapper;
         }
 
@@ -54,25 +61,27 @@ namespace MyAPI.Api.Controllers
         public async Task<ActionResult<SupplierViewModel>> Add(SupplierViewModel supplierViewModel)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest();
-            }
+
             var supplier = _mapper.Map<Supplier>(supplierViewModel);
+            var result = await _supplierService.Add(supplier);
 
-            await _supplierRepository.Add(supplier);
+            if (!result) 
+                return BadRequest();
 
-            return Ok(supplier);
+            return Ok(supplierViewModel);
         }
 
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<SupplierViewModel>> Update(Guid id, [FromBody] SupplierViewModel supplierViewModel)
         {
-            if (!ModelState.IsValid || id != supplierViewModel.Id) return BadRequest();
+            if (!ModelState.IsValid || id != supplierViewModel.Id) 
+                return BadRequest();
 
             var supplier = _mapper.Map<Supplier>(supplierViewModel);
 
-            await _supplierRepository.Update(supplier);
-
+            var result = await _supplierService.Update(supplier);
+            
             return Ok(supplier);
         }
 
@@ -80,8 +89,11 @@ namespace MyAPI.Api.Controllers
         public async Task<ActionResult<SupplierViewModel>> Delete(Guid id)
         {
             if (!ModelState.IsValid) return BadRequest();
-            
-            await _supplierRepository.Remove(id);
+            var result = await _supplierService.Remove(id);
+
+            if (!result)
+                return BadRequest();
+
             return Ok(id);
         }
     }

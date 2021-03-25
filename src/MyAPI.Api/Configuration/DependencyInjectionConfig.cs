@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyAPI.Business.Interfaces;
+using MyAPI.Business.Notifications;
+using MyAPI.Business.Services;
 using MyAPI.Data.Context;
 using MyAPI.Data.Repository;
 using System;
@@ -15,7 +17,12 @@ namespace MyAPI.Api.Configuration
         {
             services.AddScoped<ApplicationContext>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
+            services.AddScoped<ISupplierService, SupplierService>();
+
+            services.AddScoped<INotifier, Notifier>();
 
             return services;
         }

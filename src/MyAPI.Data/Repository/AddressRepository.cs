@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyAPI.Business.Intefaces;
+using MyAPI.Business.Interfaces;
 using MyAPI.Business.Models;
 using MyAPI.Data.Context;
 using System;
