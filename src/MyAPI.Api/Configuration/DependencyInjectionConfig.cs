@@ -21,6 +21,7 @@ namespace MyAPI.Api.Configuration
             services.AddScoped<IAddressRepository, AddressRepository>();
 
             services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<INotifier, Notifier>();
 

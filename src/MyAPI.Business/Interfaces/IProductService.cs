@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyAPI.Business.Interfaces
 {
-    interface IProductService : IDisposable
+    public interface IProductService : IDisposable
     {
         Task Add(Product product);
         Task Update(Product product);

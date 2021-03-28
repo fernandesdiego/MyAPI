@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace MyAPI.Business.Services
 {
-    class ProductService : BaseService, IProductService
+    public class ProductService : BaseService, IProductService
     {
         private readonly IProductRepository _productRepository;
-        private readonly INotifier _notifier;
         public ProductService(IProductRepository productRepository, INotifier notifier) : base(notifier)
         {
             _productRepository = productRepository;
