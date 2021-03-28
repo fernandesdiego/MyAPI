@@ -20,7 +20,8 @@ namespace MyAPI.Api.Controllers
         public SuppliersController(ISupplierRepository  supplierRepository, 
                                    IAddressRepository   addressRepository,
                                    ISupplierService     supplierService,
-                                   IMapper              mapper)
+                                   IMapper              mapper,
+                                   INotifier            notifier) : base(notifier)
         {
             _supplierRepository = supplierRepository;
             _addressRepository = addressRepository;
@@ -56,45 +57,68 @@ namespace MyAPI.Api.Controllers
             }
         }
 
+        [HttpGet("address/{id:guid}")]
+        public async Task<ActionResult<AddressViewModel>> GetAddressById(Guid id)
+        {
+            return _mapper.Map<AddressViewModel>(await _addressRepository.GetById(id)); 
+        }
+        [HttpPut("address/{id:guid}")]
+        public async Task<ActionResult<AddressViewModel>> UpdateAddress(Guid id, [FromBody] AddressViewModel addressViewModel)
+        {
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+
+            if (id != addressViewModel.Id)
+            {
+                NotifyError("The Id in the body is different from the Id in the query.");
+                return CustomResponse(addressViewModel);
+            }
+
+            await _supplierService.UpdateAddress(_mapper.Map<Address>(addressViewModel));
+
+            return CustomResponse(addressViewModel);
+        }
 
         [HttpPost]
         public async Task<ActionResult<SupplierViewModel>> Add(SupplierViewModel supplierViewModel)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return CustomResponse(ModelState);
+            
+            await _supplierService.Add(_mapper.Map<Supplier>(supplierViewModel));
 
-            var supplier = _mapper.Map<Supplier>(supplierViewModel);
-            var result = await _supplierService.Add(supplier);
-
-            if (!result) 
-                return BadRequest();
-
-            return Ok(supplierViewModel);
+            return CustomResponse(supplierViewModel);
         }
 
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<SupplierViewModel>> Update(Guid id, [FromBody] SupplierViewModel supplierViewModel)
         {
-            if (!ModelState.IsValid || id != supplierViewModel.Id) 
-                return BadRequest();
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
 
-            var supplier = _mapper.Map<Supplier>(supplierViewModel);
+            if (id != supplierViewModel.Id)
+            {
+                NotifyError("The Id in the body is different from the Id in the query.");
+                return CustomResponse(supplierViewModel);
+            }
 
-            var result = await _supplierService.Update(supplier);
-            
-            return Ok(supplier);
+            var result = await _supplierService.Update(_mapper.Map<Supplier>(supplierViewModel));
+
+            return CustomResponse(supplierViewModel);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<SupplierViewModel>> Delete(Guid id)
         {
-            if (!ModelState.IsValid) return BadRequest();
-            var result = await _supplierService.Remove(id);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            if (!result)
-                return BadRequest();
+            var supplier = _supplierRepository.GetSupplierAddress(id);
+            
+            if (supplier == null) return NotFound();
 
-            return Ok(id);
+            await _supplierService.Remove(id);
+
+            return CustomResponse(); ;
         }
     }
 }

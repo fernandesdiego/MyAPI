@@ -34,8 +34,14 @@ namespace MyAPI.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))
             );
             services.AddAutoMapper(typeof(Startup));
+            
             services.ResolveDependencies();
+            
             services.AddControllers();
+
+            services.Configure<ApiBehaviorOptions>(x => x.SuppressModelStateInvalidFilter = true);
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI.Api", Version = "v1" });

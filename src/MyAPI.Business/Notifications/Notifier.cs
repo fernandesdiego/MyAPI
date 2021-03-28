@@ -25,7 +25,7 @@ namespace MyAPI.Business.Notifications
             return _notifications;
         }
 
-        public bool Any()
+        public bool HasNotifications()
         {
             return _notifications.Any();
         }

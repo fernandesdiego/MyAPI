@@ -7,7 +7,7 @@ namespace MyAPI.Business.Interfaces
 {
     public interface INotifier
     {
-        bool Any();
+        bool HasNotifications();
         List<Notification> GetNotifications();
         void Handle(Notification notification);
     }
