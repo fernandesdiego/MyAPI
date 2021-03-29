@@ -57,7 +57,7 @@ namespace MyAPI.Api.Controllers
             return CustomResponse(product);
         }
 
-        [HttpPut("{id:guid")]
+        [HttpPut("{id:guid}")]
         public async Task<ActionResult<ProductViewModel>> Update(Guid id, [FromBody] ProductViewModel product)
         {
             if (id != product.Id)

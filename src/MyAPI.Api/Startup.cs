@@ -36,11 +36,8 @@ namespace MyAPI.Api
             services.AddAutoMapper(typeof(Startup));
             
             services.ResolveDependencies();
-            
-            services.AddControllers();
 
-            services.Configure<ApiBehaviorOptions>(x => x.SuppressModelStateInvalidFilter = true);
-
+            services.WebApiConfig();
 
             services.AddSwaggerGen(c =>
             {
