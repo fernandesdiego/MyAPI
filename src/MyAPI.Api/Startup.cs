@@ -33,6 +33,9 @@ namespace MyAPI.Api
             services.AddDbContext<ApplicationContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))
             );
+
+            services.AddIdentityConfiguration(Configuration);
+
             services.AddAutoMapper(typeof(Startup));
             
             services.ResolveDependencies();
@@ -59,7 +62,9 @@ namespace MyAPI.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

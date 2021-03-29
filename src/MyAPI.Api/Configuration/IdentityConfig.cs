@@ -1,0 +1,31 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using MyAPI.Api.Data;
+using MyAPI.Data.Context;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace MyAPI.Api.Configuration
+{
+    public static class IdentityConfig
+    {
+        public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString"))
+            );
+
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders();
+
+
+            return services;
+        }
+    }
+}
