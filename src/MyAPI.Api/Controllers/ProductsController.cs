@@ -57,6 +57,41 @@ namespace MyAPI.Api.Controllers
             return CustomResponse(product);
         }
 
+        [HttpPut("{id:guid")]
+        public async Task<ActionResult<ProductViewModel>> Update(Guid id, [FromBody] ProductViewModel product)
+        {
+            if (id != product.Id)
+            {
+                NotifyError("The Id in the body is different from the Id in the query.");
+                return CustomResponse(product);
+            }
+
+            var fromDb = await _productRepository.GetById(id);
+            product.Image = fromDb.Image;
+
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+
+            if(product.ImageUpload != null)
+            {
+                var imgName = Guid.NewGuid() + "_" + product.Image;
+                if (!UploadFile(product.ImageUpload, imgName))
+                {
+                    return CustomResponse(ModelState);
+                }
+
+                fromDb.Image = imgName;
+            }
+
+            fromDb.Name = product.Name;
+            fromDb.Description = product.Description;
+            fromDb.Price = product.Price;
+            fromDb.Active = product.Active;
+
+            await _productService.Update(_mapper.Map<Product>(fromDb));
+
+            return CustomResponse(product);
+        }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ProductViewModel>> Delete(Guid id)
