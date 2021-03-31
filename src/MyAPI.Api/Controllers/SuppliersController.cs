@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyAPI.Api.ViewModels;
 using MyAPI.Business.Interfaces;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyAPI.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class SuppliersController : MainController
     {
@@ -29,6 +31,7 @@ namespace MyAPI.Api.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SupplierViewModel>>> GetAll()
         {
