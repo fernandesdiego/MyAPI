@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyAPI.Api.Extensions.Authorization;
 using MyAPI.Api.ViewModels;
 using MyAPI.Business.Interfaces;
 using MyAPI.Business.Models;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace MyAPI.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ProductsController : MainController
     {
@@ -40,7 +43,8 @@ namespace MyAPI.Api.Controllers
 
             return product;
         }
-
+        
+        [ClaimsAuthorize("Product", "Add")]
         [HttpPost]
         public async Task<ActionResult<ProductViewModel>> Add(ProductViewModel product)
         {
@@ -57,6 +61,7 @@ namespace MyAPI.Api.Controllers
             return CustomResponse(product);
         }
 
+        [ClaimsAuthorize("Product", "Update")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<ProductViewModel>> Update(Guid id, [FromBody] ProductViewModel product)
         {
@@ -93,6 +98,7 @@ namespace MyAPI.Api.Controllers
             return CustomResponse(product);
         }
 
+        [ClaimsAuthorize("Product", "Delete")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ProductViewModel>> Delete(Guid id)
         {

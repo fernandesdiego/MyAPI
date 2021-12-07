@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyAPI.Api.Extensions.Authorization;
 using MyAPI.Api.ViewModels;
 using MyAPI.Business.Interfaces;
 using MyAPI.Business.Models;
@@ -65,6 +66,7 @@ namespace MyAPI.Api.Controllers
         {
             return _mapper.Map<AddressViewModel>(await _addressRepository.GetById(id)); 
         }
+        [ClaimsAuthorize("Supplier", "Update")]
         [HttpPut("address/{id:guid}")]
         public async Task<ActionResult<AddressViewModel>> UpdateAddress(Guid id, [FromBody] AddressViewModel addressViewModel)
         {
@@ -73,7 +75,7 @@ namespace MyAPI.Api.Controllers
 
             if (id != addressViewModel.Id)
             {
-                NotifyError("The Id in the body is different from the Id in the query.");
+                NotifyError("The Id in the body is not the same the Id in the query.");
                 return CustomResponse(addressViewModel);
             }
 
@@ -82,6 +84,7 @@ namespace MyAPI.Api.Controllers
             return CustomResponse(addressViewModel);
         }
 
+        [ClaimsAuthorize("Supplier","Add")]
         [HttpPost]
         public async Task<ActionResult<SupplierViewModel>> Add(SupplierViewModel supplierViewModel)
         {
@@ -93,6 +96,7 @@ namespace MyAPI.Api.Controllers
             return CustomResponse(supplierViewModel);
         }
 
+        [ClaimsAuthorize("Supplier", "Update")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<SupplierViewModel>> Update(Guid id, [FromBody] SupplierViewModel supplierViewModel)
         {
@@ -105,11 +109,15 @@ namespace MyAPI.Api.Controllers
                 return CustomResponse(supplierViewModel);
             }
 
-            var result = await _supplierService.Update(_mapper.Map<Supplier>(supplierViewModel));
-
+            if (await _supplierService.Update(_mapper.Map<Supplier>(supplierViewModel)) == false)
+            {
+                NotifyError("Error, check the fields and try again");
+            }
+            
             return CustomResponse(supplierViewModel);
         }
 
+        [ClaimsAuthorize("Supplier", "Delete")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<SupplierViewModel>> Delete(Guid id)
         {
