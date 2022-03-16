@@ -1,20 +1,26 @@
 
 # MyAPI
-Sample ASP.NET Core REST WebAPI
-This repo contains an API project divided in 3 layers
+Sample ASP.NET Core REST WebAPI.
+This repo contains an API project divided in 3 layers.
 
-|Name		   |Type	 |
+
+![Layers](https://img001.prntscr.com/file/img001/UvyekEKiQaG0zwvgm10EFw.png)
+
+|Name		       |Type	   |
 |--------------|---------|
-|MyAPI.API	   |Web		 |
+|MyAPI.API	   |Web		   |
 |MyAPI.Business|Class Lib|
 |MyAPI.Data	   |Class Lib|
-## Considerations
+
+
+## Purpose
 This was built as a study to understand concepts of decoupled code, dependency injection, layering, validations, authentication/authorization, JWT.
 
 ## Summary
 ### MyAPI.API
 The API was built using the MVC pattern and is documented with Swagger. 
 It handles the the authentication and authorization using JWT.
+![Swagger](https://img001.prntscr.com/file/img001/j_mnOB0aQBWr824OiYeTiQ.png)
 ### MyAPI.Business
 This layer handles the business rules using `FluentValidation`, exposes services for the API to handle the models and interacts with the Data layer.
 ### MyAPI.Data
@@ -99,4 +105,4 @@ All the endpoints return a ``CustomResponse`` object that handles the response b
 >     data = result //A JSON object containing the return of a request
 >});
 
-![DESCRIPTION](https://img001.prntscr.com/file/img001/UvyekEKiQaG0zwvgm10EFw.png)
+
