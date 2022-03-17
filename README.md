@@ -3,8 +3,8 @@
 Sample ASP.NET Core REST WebAPI.
 This repo contains an API project divided in 3 layers.
 
+![1616971455222](https://user-images.githubusercontent.com/20885547/158857609-5e6d8f40-df49-4691-9733-8bb1aab24233.jpg)
 
-![Layers](https://img001.prntscr.com/file/img001/UvyekEKiQaG0zwvgm10EFw.png)
 
 |Name		       |Type	   |
 |--------------|---------|
@@ -20,7 +20,10 @@ This was built as a study to understand concepts of decoupled code, dependency i
 ### MyAPI.API
 The API was built using the MVC pattern and is documented with Swagger. 
 It handles the the authentication and authorization using JWT.
-![Swagger](https://img001.prntscr.com/file/img001/j_mnOB0aQBWr824OiYeTiQ.png)
+
+![j_mnOB0aQBWr824OiYeTiQ](https://user-images.githubusercontent.com/20885547/158857339-841682df-20b6-4b7a-9262-8256e4d5d492.png)
+
+
 ### MyAPI.Business
 This layer handles the business rules using `FluentValidation`, exposes services for the API to handle the models and interacts with the Data layer.
 ### MyAPI.Data
